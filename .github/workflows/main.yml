@@ -26,5 +26,9 @@ jobs:
     - name: Publish
       run: dotnet publish ./Mindware_Prototip.sln --configuration Release --no-build
 
-       
-    
+    - name: Deployment
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: mindware
+        
+        package: './publish'
