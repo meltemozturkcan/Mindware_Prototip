@@ -26,9 +26,16 @@ jobs:
     - name: Publish
       run: dotnet publish ./Mindware_Prototip.sln --configuration Release --no-build
 
-    - name: Deployment
-      uses: azure/webapps-deploy@v2
+    # Azure deployment adımları buradan başlıyor
+    - name: 'Login to Azure'
+      uses: azure/login@v1
       with:
-        app-name: mindware
-        
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.mindware }}
         package: './publish'
+
+    
