@@ -24,7 +24,7 @@ jobs:
       run: dotnet build ./Mindware_Prototip.sln --configuration Release
 
     - name: Publish
-      run: dotnet publish ./Mindware_Prototip.sln/Mindware_Prototip.csproj --configuration Release --no-build --output '${{secrets.AZURE_PUBLISH_PROFILE}}'
+      run: dotnet publish ./Mindware_Prototip.sln/Mindware_Prototip.csproj --configuration Release --no-build --output './publish'
 
     - name: Deployment
       uses: azure/webapps-deploy@v2
