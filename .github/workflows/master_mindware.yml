@@ -1,52 +1,42 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - mindware
-
 on:
   push:
     branches:
       - master
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
-
+      contents: read
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-
       - name: Build with dotnet
         run: dotnet build --configuration Release
-
       - name: dotnet publish
         run: dotnet publish ./Mindware_Prototip/Mindware_Prototip.csproj --configuration Release --no-build --output './publish'
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
+          path: './publish'  # ← DÜZELTME
+          
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+      id-token: write
+      contents: read
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: './publish'  # ← DÜZELTME
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -54,13 +44,13 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_687C1BBFE0E54920AD79C88747EC12CE }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A8B617E09CC74CF1BA52D9BFCB63B173 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C600D7D6349F4948A7EBE5268662FE1D }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'mindware'
+          app-name: 'mindware-dfcdhdh9b0ajasdd'  # ← DÜZELTME
           slot-name: 'Production'
-          package: .
+          package: './publish'  # ← DÜZELTME
 
           
+
