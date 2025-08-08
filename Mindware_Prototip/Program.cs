@@ -21,7 +21,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-app.MapGet("/getall", () =>Results.Ok(new List<string>() {"Örnek1","Örnek2" }));  
+app.MapGet("/getall", () =>Results.Ok(new List<string>() {"Örnek1","Örnek2" }));
+app.MapGet("/create",(string work)=>
+{
+    Results.Ok($"Çalýþma oluþturuldu: {work}"); 
+});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
