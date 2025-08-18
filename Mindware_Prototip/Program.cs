@@ -58,7 +58,7 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=DashboardController}/{action=Index}/{id?}");
+    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 app.MapControllers();
 
 app.MapGet("/getall", (MindwareContext context) => Results.Ok(context.DeviceDatas.ToList()));
@@ -77,8 +77,5 @@ app.MapGet("/create", (MindwareContext context, string Uuid) =>
     return Results.Ok("Tag created successfully");
 });
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
