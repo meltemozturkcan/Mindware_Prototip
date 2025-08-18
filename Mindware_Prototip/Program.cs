@@ -36,7 +36,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // Güvenli migration
-using (var scope = app.Services.CreateScope())
+//using (var scope = app.Services.CreateScope())
 {
     try
     {
