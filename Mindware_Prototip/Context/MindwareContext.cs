@@ -4,7 +4,9 @@ namespace Mindware_Prototip.Context
 {
     public class MindwareContext:DbContext
     {
-      
+        public MindwareContext(DbContextOptions<MindwareContext> options) : base(options)
+        {
+        }
         public DbSet<Entities.DeviceData> DeviceDatas { get; set; } 
         public DbSet<Entities.NRFTerminal> NRFTerminals { get; set; }  
         public DbSet<Entities.Tag> Tags { get; set; }   
