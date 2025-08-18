@@ -56,6 +56,9 @@ app.UseRouting();
 //}
 
 app.UseAuthorization();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=DashboardController}/{action=Index}/{id?}");
 
 app.MapGet("/getall", (MindwareContext context) => Results.Ok(context.DeviceDatas.ToList()));
 
