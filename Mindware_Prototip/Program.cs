@@ -37,23 +37,23 @@ app.UseRouting();
 
 // Güvenli migration
 //using (var scope = app.Services.CreateScope())
-{
-    try
-    {
-        var services = scope.ServiceProvider;
-        var context = services.GetRequiredService<MindwareContext>();
-        var logger = services.GetRequiredService<ILogger<Program>>();
+//{
+//    try
+//    {
+//        var services = scope.ServiceProvider;
+//        var context = services.GetRequiredService<MindwareContext>();
+//        var logger = services.GetRequiredService<ILogger<Program>>();
 
-        logger.LogInformation("Starting database migration...");
-        context.Database.Migrate();
-        logger.LogInformation("Database migration completed successfully.");
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
-        logger?.LogError(ex, "An error occurred while migrating the database.");
-    }
-}
+//        logger.LogInformation("Starting database migration...");
+//        context.Database.Migrate();
+//        logger.LogInformation("Database migration completed successfully.");
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
+//        logger?.LogError(ex, "An error occurred while migrating the database.");
+//    }
+//}
 
 app.UseAuthorization();
 
