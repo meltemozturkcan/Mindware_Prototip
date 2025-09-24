@@ -76,6 +76,11 @@ app.MapGet("/create", (MindwareContext context, string Uuid) =>
     context.SaveChanges();
     return Results.Ok("Tag created successfully");
 });
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<MindwareContext>();
+    context.Database.Migrate(); 
+}
 
-
-app.Run();
+    app.Run();
