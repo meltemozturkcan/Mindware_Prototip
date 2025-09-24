@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MindwareContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("MindwareDbConnection"),
-        sqlOptions => {
+        sqlOptions =>
+        {
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
@@ -35,32 +36,36 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// Güvenli migration
-//using (var scope = app.Services.CreateScope())
-//{
-//    try
-//    {
-//        var services = scope.ServiceProvider;
-//        var context = services.GetRequiredService<MindwareContext>();
-//        var logger = services.GetRequiredService<ILogger<Program>>();
+// --- Güvenli migration bloðu ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
 
-//        logger.LogInformation("Starting database migration...");
-//        context.Database.Migrate();
-//        logger.LogInformation("Database migration completed successfully.");
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
-//        logger?.LogError(ex, "An error occurred while migrating the database.");
-//    }
-//}
+    try
+    {
+        var context = services.GetRequiredService<MindwareContext>();
+        logger.LogInformation("Starting database migration...");
+        context.Database.Migrate();
+        logger.LogInformation("Database migration completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database.");
+        // throw; // Ýstersen burada tekrar fýrlatabilirsin, ama Azure’da 500.30’a sebep olur.
+    }
+}
+// --------------------------------
 
 app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+
 app.MapControllers();
 
+// Minimal API örnekleri
 app.MapGet("/getall", (MindwareContext context) => Results.Ok(context.DeviceDatas.ToList()));
 
 app.MapGet("/create", (MindwareContext context, string Uuid) =>
@@ -72,15 +77,11 @@ app.MapGet("/create", (MindwareContext context, string Uuid) =>
         IsDeleted = false,
         Description = "This is a sample tag"
     };
+
     context.Tags.Add(tag);
     context.SaveChanges();
+
     return Results.Ok("Tag created successfully");
 });
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    var context = services.GetRequiredService<MindwareContext>();
-//    context.Database.Migrate(); 
-//}
 
-    app.Run();
+app.Run();
