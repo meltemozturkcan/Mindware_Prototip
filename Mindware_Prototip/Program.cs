@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Mindware_Prototip.Context;
-
+using Mindware_Prototip.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<MindwareContext>(options =>
+builder.Services.AddDbContext<Mindware_Prototip.Context.MindwareContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("MindwareDbConnection"),
         sql => {
